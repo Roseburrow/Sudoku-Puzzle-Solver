@@ -3,27 +3,32 @@
 
 CellBlock::CellBlock()
 {
+	InitCells();
 }
 
 CellBlock::~CellBlock()
 {
-	/*for (int i = 0; i < 9; ++i)
-	{
-		delete cells[i];
-	}*/
+
 }
 
+void CellBlock::InitCells()
+{
+	for (int i = 0; i < 9; ++i)
+	{
+		cells[i] = NULL;
+	}
+}
 void CellBlock::SetCell(int index, Cell *cell)
 {
 	cells[index] = cell;
 }
 
-int CellBlock::GetValue(int index)
+int CellBlock::GetValue(int index) const 
 {
 	return cells[index]->GetValue();
 }
 
-Cell* CellBlock::GetCell(int index)
+Cell* CellBlock::GetCell(int index) const
 {
 	return cells[index];
 }

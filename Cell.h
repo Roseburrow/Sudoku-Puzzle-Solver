@@ -4,26 +4,27 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include "Statistics.h"
 
 class Cell
 {
 public:
-	Cell(int num);
-	~Cell(void);
+	explicit Cell();
+	explicit Cell(int num);
+	~Cell();
 
 	//Methods
 	void SetValue(int num);
-	int GetValue();
+	int GetValue() const;
 
-	bool GetWasSetByFile();
-	void WasSetByFile(const bool set);
+	bool GetWasSetByFile() const;
 
 	void InitCandidates();
 	int GetCandidateValue(const int index);
-	void RemoveCandidate(const int value);
+	void RemoveCandidate(const int value, Statistics* stats);
 	void EmptyCandidates();
-	bool Contains(const int value);
-	int GetCandidatesLength();
+	bool Contains(const int value, Statistics* stats);
+	int GetCandidatesLength() const;
 
 private:
 	std::vector<int> candidateList;

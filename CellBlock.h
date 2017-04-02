@@ -9,8 +9,9 @@ public:
 	~CellBlock(void);
 
 	void SetCell(int index, Cell *cell);
-	Cell* GetCell(const int index);
-	int GetValue(const int index);
+	Cell* GetCell(const int index) const;
+	int GetValue(const int index) const;
+	void InitCells();
 
 private:
 	Cell* cells[9];

@@ -1,16 +1,20 @@
 #include "Cell.h"
 #include "vector"
 
-Cell::Cell(int num) : value(num)
+Cell::Cell() : value(0), setByFile(false) 
 {
-	setByFile = false;
+	InitCandidates();
+}
+
+Cell::Cell(int num) : value(num), setByFile(true)
+{
 }
 
 Cell::~Cell()
 {
 }
 
-int Cell::GetValue()
+int Cell::GetValue() const
 {
 	return value;
 }
@@ -20,14 +24,9 @@ void Cell::SetValue(int num)
 	value = num;
 }
 
-bool Cell::GetWasSetByFile()
+bool Cell::GetWasSetByFile() const
 {
 	return setByFile;
-}
-
-void Cell::WasSetByFile(bool set)
-{
-	setByFile = set;
 }
 
 void Cell::InitCandidates()
@@ -38,15 +37,20 @@ void Cell::InitCandidates()
 	}
 }
 
-void Cell::RemoveCandidate(const int value)
+void Cell::RemoveCandidate(const int value, Statistics* stats)
 {
-	//Removing from a vector by value from user:Georg Fritzsche.
-	//http://stackoverflow.com/questions/3385229/c-erase-vector-element-by-value-rather-than-by-position#3385251
-	candidateList.erase(std::remove(candidateList.begin(), candidateList.end(), value), 
-						candidateList.end());
+	for (int i = 0; i < candidateList.size(); ++i)
+	{
+		stats->IncrementConsideredCands();
+		if (value == candidateList[i])
+		{
+			candidateList.erase(candidateList.begin() + i);
+			break;
+		}
+	}
 }
 
-int Cell::GetCandidatesLength()
+int Cell::GetCandidatesLength() const
 {
 	return candidateList.size();
 }
@@ -56,15 +60,18 @@ int Cell::GetCandidateValue(int index)
 	return candidateList[index];
 }
 
-bool Cell::Contains(int value)
+bool Cell::Contains(int value, Statistics* stats)
 {
-	return std::find(candidateList.begin(), 
-					 candidateList.end(), 
-					 value) != candidateList.end();
+	for (int i = 0; i < candidateList.size(); ++i)
+	{
+		stats->IncrementConsideredCands();
+		if (value == candidateList[i])
+			return true;
+	}
+	return false;
 }
 
 void Cell::EmptyCandidates()
 {
 	candidateList.clear();
 }
-
