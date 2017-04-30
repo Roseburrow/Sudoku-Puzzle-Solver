@@ -93,9 +93,11 @@ void SudokuPuzzle::Solve(char filenameIn[])
 	bool nakedStop;
 	Cell* checkCell;
 
+	//Does one pass through the grid and narrows down the candidate lists
+	//This is to ensure that a naked single can be solved at the start.
 	InitSolve();
 
-	// Solve the puzzle
+	//Overall solve loop...
 	do
 	{
 		int checkBlock = 0;
@@ -107,6 +109,7 @@ void SudokuPuzzle::Solve(char filenameIn[])
 		//For every cell...
 		for (int i = 0; i < 9; ++i)
 		{
+			//Used to check for blocks.
 			if (i % 3 == 0 && i != 0)
 			{
 				checkBlock = checkBlock + 3;
@@ -117,6 +120,9 @@ void SudokuPuzzle::Solve(char filenameIn[])
 			{
 				checkCell = gridRows[i].GetCell(j);
 
+				//Checks for changes via the solving of a cell.
+				//If a pass is made and no changes are made then we have
+				//solved all that we can else we continue.
 				if (CheckNakedSingle(checkCell, checkBlock, i, j))
 				{
 					nakedStop = true;
@@ -128,6 +134,7 @@ void SudokuPuzzle::Solve(char filenameIn[])
 				
 				++index;
 
+				//Used to check for blocks.
 				if ((j + 1) % 9 == 0)
 				{
 					checkBlock = checkBlock - 2;
@@ -162,12 +169,16 @@ void SudokuPuzzle::Solve(char filenameIn[])
 
 bool SudokuPuzzle::CheckNakedSingle(Cell* checkCell, int block, int row, int col)
 {
+	//If a cell only has 1 candidate then... 
 	if (checkCell->GetCandidatesLength() == 1)
 	{
+		//...get the candidate and set the cell to it. Then remove it from the cells
+		//candidate list.
 		int c = checkCell->GetCandidateValue(0);
 		checkCell->SetValue(c);
 		checkCell->RemoveCandidate(c, &stats);
 
+		//Remove the newly set value from other candidate lists on the row, col and block.
 		for (int i = 0; i < 9; ++i)
 		{
 			gridBlocks[block].GetCell(i)->RemoveCandidate(c, &stats);
@@ -219,6 +230,8 @@ bool SudokuPuzzle::NarrowCandidates(Cell* checkCell, int checkCellRow, int check
 
 	for (int j = 0; j < 9; ++j)
 	{
+		//If the cell has no candidates it has been solved or set by the file.
+		//We therefore cannot remove anything from their list so return.
 		if (checkCell->GetCandidatesLength() == 0)
 		{
 			return false;
@@ -227,8 +240,11 @@ bool SudokuPuzzle::NarrowCandidates(Cell* checkCell, int checkCellRow, int check
 		//Checks the row...
 		if (j != checkCellColumn)
 		{
+			//Sets comparison cell to the next cell along.
 			comparisonCell = gridRows[checkCellRow].GetCell(j);
 
+			//If the value of the comparison cell isnt 0 then we can remove its value
+			//from the current cell's candidate list.
 			if (comparisonCell->GetValue() != 0)
 			{
 				checkCell->RemoveCandidate(comparisonCell->GetValue(), &stats);

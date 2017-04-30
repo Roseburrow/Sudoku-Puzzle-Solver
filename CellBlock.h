@@ -9,7 +9,7 @@ public:
 	~CellBlock(void);
 
 	void SetCell(int index, Cell *cell);
-	Cell* GetCell(const int index) const;
+	Cell* GetCell(const int index) const throw();
 	int GetValue(const int index) const;
 	void InitCells();
 

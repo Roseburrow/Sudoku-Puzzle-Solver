@@ -26,6 +26,7 @@ void Cell::SetValue(int num)
 
 bool Cell::GetWasSetByFile() const
 {
+	//This method has a terrible name.
 	return setByFile;
 }
 
@@ -39,11 +40,15 @@ void Cell::InitCandidates()
 
 void Cell::RemoveCandidate(const int value, Statistics* stats)
 {
-	for (int i = 0; i < candidateList.size(); ++i)
+	//For each candidate in the cells list...
+	for (unsigned int i = 0; i < candidateList.size(); ++i)
 	{
 		stats->IncrementConsideredCands();
+
+		//Check if the candidate is the one you want to remove...
 		if (value == candidateList[i])
 		{
+			//Remove that candidate...
 			candidateList.erase(candidateList.begin() + i);
 			break;
 		}
@@ -62,9 +67,12 @@ int Cell::GetCandidateValue(int index)
 
 bool Cell::Contains(int value, Statistics* stats)
 {
-	for (int i = 0; i < candidateList.size(); ++i)
+	//For each candidate in the candidate list...
+	for (unsigned int i = 0; i < candidateList.size(); ++i)
 	{
 		stats->IncrementConsideredCands();
+
+		//Check if given value is in the candidate list.
 		if (value == candidateList[i])
 			return true;
 	}

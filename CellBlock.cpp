@@ -8,7 +8,6 @@ CellBlock::CellBlock()
 
 CellBlock::~CellBlock()
 {
-
 }
 
 void CellBlock::InitCells()
@@ -28,7 +27,7 @@ int CellBlock::GetValue(int index) const
 	return cells[index]->GetValue();
 }
 
-Cell* CellBlock::GetCell(int index) const
+Cell* CellBlock::GetCell(int index) const throw()
 {
 	return cells[index];
 }
